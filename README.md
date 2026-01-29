@@ -5,7 +5,7 @@
 ## Integrantes Grupo 3
 
 * Evelyn Condoy
-* Viviana Puga
+* Dayra Mosquera
 * Alejandro Simba
 * Darío Castillo
 
