@@ -1,0 +1,97 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #f2f2f2;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.ventas-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.card {
+    background: #fff3e0;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.card h2 {
+    margin-bottom: 15px;
+    color: #bf360c;
+}
+
+.card label {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.pedido {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.pedido input {
+    padding: 5px;
+}
+
+.pedido span {
+    font-size: 14px;
+}
+
+.pedido strong {
+    color: #444;
+}
+
+.pago {
+    grid-column: span 2;
+}
+
+.pago-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.pago-grid input {
+    padding: 6px;
+}
+
+button {
+    width: 200px;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    background: #ff7043;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+}
+
+button:hover {
+    background: #f4511e;
+}
