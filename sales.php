@@ -102,7 +102,11 @@ function money($v) {
 <body>
 
 <div class="container">
-    <h1>Sistema de Ventas</h1>
+<div class="nav-top">
+    <a href="login.php" class="btn-back"><span class="icon">⇽</span> Volver</a>
+</div>
+
+<h1>Sistema de Ventas</h1>
 
     <form class="ventas-form" method="post" action="sales.php">
 
@@ -111,23 +115,19 @@ function money($v) {
             <h2>Paquetes</h2>
 
             <label>
-                <input type="radio" name="paquete" value="combo1" <?= ($paquete==="combo1") ? "checked" : "" ?>>
-                Hamburguesa, Papas y Refresco
+                <input type="radio" name="paquete" value="combo1"> Hamburguesa, Papas y Refresco
             </label>
 
             <label>
-                <input type="radio" name="paquete" value="combo2" <?= ($paquete==="combo2") ? "checked" : "" ?>>
-                Pizza, Nuggets y Refresco
+                 <input type="radio" name="paquete" value="combo2"> Pizza, Nuggets y Refresco
             </label>
 
             <label>
-                <input type="radio" name="paquete" value="combo3" <?= ($paquete==="combo3") ? "checked" : "" ?>>
-                Ensalada, Yogurt y Agua
+                <input type="radio" name="paquete" value="combo3"> Ensalada, Yogurt y Agua
             </label>
 
             <label>
-                <input type="radio" name="paquete" value="otras" <?= ($paquete==="otras") ? "checked" : "" ?>>
-                Otras opciones
+                <input type="radio" name="paquete" value="otras" checked> Otras opciones
             </label>
         </section>
 
@@ -189,6 +189,7 @@ function money($v) {
             </div>
 
             <button type="submit">Pagar</button>
+            <button type="button" onclick="window.print()" class="btn-print">Imprimir Comprobante</button>
 
             <?php if ($mensaje): ?>
                 <div class="msg <?= $tipo ?>"><?= htmlspecialchars($mensaje) ?></div>

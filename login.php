@@ -48,8 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // 5) Resultado según coincidencia
             if ($acceso) {
-                $mensaje = "Acceso permitido ✅ Bienvenido, $usuario.";
-                $tipo = "ok";
+                // Redirigir a la página de ventas
+                header("Location: sales.php");
+                exit(); // Es muy importante poner exit() después de un header para detener la ejecución
             } else {
                 $mensaje = "Usuario o contraseña incorrectos.";
                 $tipo = "error";
