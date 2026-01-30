@@ -6,6 +6,7 @@
 body {
     margin: 0;
     background: #f2f2f2;
+    color: #333;
 }
 
 .container {
@@ -20,12 +21,14 @@ h1 {
     color: #333;
 }
 
+/* GRID PRINCIPAL (2 columnas) */
 .ventas-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 25px;
 }
 
+/* TARJETAS */
 .card {
     background: #fff3e0;
     padding: 20px;
@@ -38,22 +41,44 @@ h1 {
     color: #bf360c;
 }
 
+/* LABELS (RADIOS) */
 .card label {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 10px;
     cursor: pointer;
 }
 
+/* Inputs radio un poco más visibles */
+.card input[type="radio"] {
+    transform: scale(1.05);
+}
+
+/* PEDIDOS (cantidad + producto + precio) */
 .pedido {
     display: grid;
-    grid-template-columns: 60px 1fr auto;
+    grid-template-columns: 70px 1fr auto;
     gap: 10px;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .pedido input {
-    padding: 5px;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.15);
+    outline: none;
+}
+
+/* Para que sea más limpio con type number */
+.pedido input[type="number"] {
+    width: 70px;
+}
+
+.pedido input:focus {
+    border-color: #ff7043;
+    box-shadow: 0 0 0 3px rgba(255,112,67,0.20);
 }
 
 .pedido span {
@@ -64,21 +89,46 @@ h1 {
     color: #444;
 }
 
+/* SECCIÓN DE PAGO ocupa 2 columnas */
 .pago {
     grid-column: span 2;
 }
 
+/* GRID de pago: Subtotal/IVA | Total/Pago/Cambio */
 .pago-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 12px;
     margin-bottom: 20px;
 }
 
-.pago-grid input {
-    padding: 6px;
+.pago-grid label {
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
 }
 
+.pago-grid input {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.15);
+    outline: none;
+}
+
+/* Inputs de cálculo (solo lectura) para que se note que los llena PHP */
+.pago-grid input[readonly] {
+    background: rgba(255,255,255,0.65);
+    border: 1px dashed rgba(0,0,0,0.25);
+    color: #333;
+}
+
+/* Input pago (editable) un poco más destacado */
+.pago-grid input:not([readonly]):focus {
+    border-color: #ff7043;
+    box-shadow: 0 0 0 3px rgba(255,112,67,0.20);
+}
+
+/* BOTÓN PAGAR */
 button {
     width: 200px;
     padding: 10px;
@@ -90,8 +140,46 @@ button {
     cursor: pointer;
     display: block;
     margin: 0 auto;
+    transition: transform 0.12s ease, background 0.2s ease;
 }
 
 button:hover {
     background: #f4511e;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* ==========================
+   MENSAJES (para PHP)
+   ========================== */
+.msg {
+    margin-top: 15px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(0,0,0,0.12);
+}
+
+.msg.error {
+    border-color: rgba(220, 60, 60, 0.55);
+}
+
+.msg.ok {
+    border-color: rgba(40, 170, 90, 0.55);
+}
+
+/* Responsivo: en móvil todo a una columna */
+@media (max-width: 900px) {
+    .ventas-form {
+        grid-template-columns: 1fr;
+    }
+    .pago {
+        grid-column: span 1;
+    }
+    .pago-grid {
+        grid-template-columns: 1fr;
+    }
 }
