@@ -1,20 +1,20 @@
 <?php
 // sales.php
 
-$IVA_PORC = 0.16;
+$IVA_PORC = 0.16; 
 
 $precios = [
-    "hamburguesa" => 35.00,
-    "papas"       => 15.00,
-    "refresco"    => 12.00,
-    "pizza"       => 70.00,
-    "nuggets"     => 25.00,
-    "ensalada"    => 30.00,
-    "yogurt"      => 15.00,
-    "agua"        => 12.00
+    "hamburguesa" => 35.00, 
+    "papas"       => 15.00, 
+    "refresco"    => 12.00, 
+    "pizza"       => 70.00, 
+    "nuggets"     => 25.00, 
+    "ensalada"    => 30.00, 
+    "yogurt"      => 15.00, 
+    "agua"        => 12.00  
 ];
 
-$paquete = $_POST["paquete"] ?? "otras";
+$paquete = $_POST["paquete"] ?? "otras"; 
 
 $cantidades = [
     "hamburguesa" => (int)($_POST["hamburguesa"] ?? 0),
@@ -27,54 +27,37 @@ $cantidades = [
     "agua"        => (int)($_POST["agua"] ?? 0),
 ];
 
-$pagoCliente = (float)($_POST["pago"] ?? 0);
+$pagoCliente = (float)($_POST["pago"] ?? 0); 
 
 $subtotal = 0;
 $iva = 0;
 $total = 0;
 $cambio = 0;
-
 $mensaje = "";
 $tipo = "";
 
-// ================= PROCESAMIENTO =================
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Pedidos individuales (ciclo)
+    if ($paquete === "combo1") {
+        $cantidades["hamburguesa"] = 1; $cantidades["papas"] = 1; $cantidades["refresco"] = 1;
+    } elseif ($paquete === "combo2") {
+        $cantidades["pizza"] = 1; $cantidades["nuggets"] = 1; $cantidades["refresco"] = 1;
+    } elseif ($paquete === "combo3") {
+        $cantidades["ensalada"] = 1; $cantidades["yogurt"] = 1; $cantidades["agua"] = 1;
+    }
+
     foreach ($cantidades as $producto => $cant) {
         if ($cant < 0) $cant = 0;
         $subtotal += $cant * $precios[$producto];
     }
 
-    // Paquetes (switch)
-    switch ($paquete) {
-        case "combo1":
-            $subtotal += $precios["hamburguesa"] + $precios["papas"] + $precios["refresco"];
-            break;
-
-        case "combo2":
-            $subtotal += $precios["pizza"] + $precios["nuggets"] + $precios["refresco"];
-            break;
-
-        case "combo3":
-            $subtotal += $precios["ensalada"] + $precios["yogurt"] + $precios["agua"];
-            break;
-
-        case "otras":
-        default:
-            break;
-    }
-
-    // IVA y total
     $iva = $subtotal * $IVA_PORC;
     $total = $subtotal + $iva;
 
-    // Pago y cambio
     if ($pagoCliente > 0) {
         if ($pagoCliente < $total) {
             $mensaje = "Pago insuficiente. Debe completar el total a pagar.";
             $tipo = "error";
-            $cambio = 0;
         } else {
             $cambio = $pagoCliente - $total;
             $mensaje = "Pago realizado correctamente.";
@@ -95,109 +78,87 @@ function money($v) {
 <head>
     <meta charset="UTF-8">
     <title>Formulario de Ventas</title>
-
-    <!-- ✅ CSS CORRECTO -->
     <link href="public/css/sale.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
-<div class="nav-top">
-    <a href="login.php" class="btn-back"><span class="icon">⇽</span> Volver</a>
-</div>
+    <div class="nav-top">
+        <a href="login.php" class="btn-back">Volver</a>
+    </div>
 
-<h1>Sistema de Ventas</h1>
+    <h1>Sistema de Ventas</h1>
 
-    <form class="ventas-form" method="post" action="sales.php">
+    <form class="ventas-form" id="formVentas" method="post" action="sales.php">
 
-        <!-- PAQUETES -->
         <section class="card">
             <h2>Paquetes</h2>
-
-            <label>
-                <input type="radio" name="paquete" value="combo1"> Hamburguesa, Papas y Refresco
-            </label>
-
-            <label>
-                 <input type="radio" name="paquete" value="combo2"> Pizza, Nuggets y Refresco
-            </label>
-
-            <label>
-                <input type="radio" name="paquete" value="combo3"> Ensalada, Yogurt y Agua
-            </label>
-
-            <label>
-                <input type="radio" name="paquete" value="otras" checked> Otras opciones
-            </label>
+            <label><input type="radio" name="paquete" value="combo1" <?= $paquete=='combo1'?'checked':'' ?>> Hamburguesa, Papas y Refresco</label>
+            <label><input type="radio" name="paquete" value="combo2" <?= $paquete=='combo2'?'checked':'' ?>> Pizza, Nuggets y Refresco</label>
+            <label><input type="radio" name="paquete" value="combo3" <?= $paquete=='combo3'?'checked':'' ?>> Ensalada, Yogurt y Agua</label>
+            <label><input type="radio" name="paquete" value="otras" <?= $paquete=='otras'?'checked':'' ?>> Otras opciones</label>
         </section>
 
-        <!-- PEDIDOS -->
         <section class="card">
             <h2>Pedidos</h2>
-
-            <?php
-            $labels = [
-                "hamburguesa" => "Hamburguesa",
-                "papas" => "Papas",
-                "refresco" => "Refresco",
-                "pizza" => "Pizza",
-                "nuggets" => "Nuggets",
-                "ensalada" => "Ensalada",
-                "yogurt" => "Yogurt",
-                "agua" => "Agua"
-            ];
-
-            foreach ($labels as $key => $nombre):
-            ?>
+            <?php foreach ($precios as $key => $precio): ?>
             <div class="pedido">
-                <input type="number" min="0" name="<?= $key ?>" value="<?= $cantidades[$key] ?>">
-                <span><?= $nombre ?></span>
-                <strong>$<?= money($precios[$key]) ?></strong>
+                <input type="number" min="0" name="<?= $key ?>" value="<?= $cantidades[$key] ?>" data-prod="<?= $key ?>">
+                <span><?= ucfirst($key) ?></span>
+                <strong>$<?= money($precio) ?></strong>
             </div>
             <?php endforeach; ?>
         </section>
 
-        <!-- PAGO -->
         <section class="card pago">
-            <h2>Pago</h2>
-
+            <h2>Resumen de Venta</h2>
             <div class="pago-grid">
-                <label>
-                    Subtotal
-                    <input type="text" readonly value="<?= money($subtotal) ?>">
-                </label>
-
-                <label>
-                    IVA 16%
-                    <input type="text" readonly value="<?= money($iva) ?>">
-                </label>
-
-                <label>
-                    Total a pagar
-                    <input type="text" readonly value="<?= money($total) ?>">
-                </label>
-
-                <label>
-                    Pago
-                    <input type="number" step="0.01" min="0" name="pago" value="<?= ($pagoCliente>0)?money($pagoCliente):"" ?>">
-                </label>
-
-                <label>
-                    Cambio
-                    <input type="text" readonly value="<?= money($cambio) ?>">
-                </label>
+                <label>Subtotal <input type="text" readonly value="<?= money($subtotal) ?>"></label>
+                <label>IVA 16% <input type="text" readonly value="<?= money($iva) ?>"></label>
+                <label>Total a pagar <input type="text" readonly value="<?= money($total) ?>"></label>
+                <label>Pago <input type="number" step="0.01" name="pago" value="<?= $pagoCliente > 0 ? money($pagoCliente) : '' ?>"></label>
+                <label>Cambio <input type="text" readonly value="<?= money($cambio) ?>"></label>
             </div>
-
-            <button type="submit">Pagar</button>
-            <button type="button" onclick="window.print()" class="btn-print">Imprimir Comprobante</button>
-
+            
             <?php if ($mensaje): ?>
                 <div class="msg <?= $tipo ?>"><?= htmlspecialchars($mensaje) ?></div>
             <?php endif; ?>
         </section>
 
+        <div class="acciones-pago">
+            <button type="submit">Pagar</button> 
+            <button type="button" class="btn-print" onclick="window.print()">
+                Imprimir Ticket
+            </button>
+        </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const radios = document.querySelectorAll('input[name="paquete"]');
+    const inputsNumber = document.querySelectorAll('input[type="number"]:not([name="pago"])');
+
+    const combos = {
+        'combo1': ['hamburguesa', 'papas', 'refresco'],
+        'combo2': ['pizza', 'nuggets', 'refresco'],
+        'combo3': ['ensalada', 'yogurt', 'agua'],
+        'otras': []
+    };
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const seleccion = this.value;
+            const itemsIncluidos = combos[seleccion];
+            inputsNumber.forEach(input => input.value = 0);
+            itemsIncluidos.forEach(prod => {
+                const target = document.querySelector(`input[name="${prod}"]`);
+                if (target) target.value = 1;
+            });
+        });
+    });
+});
+</script>
 
 </body>
 </html>
